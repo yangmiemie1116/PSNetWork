@@ -1,3 +1,36 @@
-PODFILE CHECKSUM: fbd15790df4d0377aa7529e57bbe12eee10363e4
+PODS:
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
+    - AFNetworking/NSURLSession
+  - PSNetWork (0.0.1):
+    - AFNetworking
+    - ReactiveObjC (~> 2.1)
+  - ReactiveObjC (2.1.2)
+
+DEPENDENCIES:
+  - PSNetWork (from `./`)
+
+EXTERNAL SOURCES:
+  PSNetWork:
+    :path: ./
+
+SPEC CHECKSUMS:
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  PSNetWork: 78fa1b8b328995635fb3a4ff25bc8bb9a134fefa
+  ReactiveObjC: 7b6782ae39f9ac0f57205c3b0c0b69b9dd7048c0
+
+PODFILE CHECKSUM: 156a1a7b881fe4e92a25330a8f6ef3ea4efe5b9b
 
 COCOAPODS: 1.2.1.beta.1
