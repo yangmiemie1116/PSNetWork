@@ -7,12 +7,12 @@ pod 'PSNetWork'
 ```
 
 # 说明
-首先写入一个请求的baseURL
+首先注册一个请求的baseURL
 ```
 - (void)registerBaseUrl:(NSString*_Nonnull)baseUrlString;
 ```
 
-为每一个请求定义超时时间
+可以为每一个请求定义超时时间，默认是60s
 ```
 @property (nonatomic, assign) NSTimeInterval timeout;
 ```
