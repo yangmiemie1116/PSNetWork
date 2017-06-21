@@ -22,8 +22,23 @@ pod 'PSNetWork'
 ```
 不同的请求方式
 ```
+//get
 - (RACSignal*_Nonnull)mic_GET:(NSDictionary*_Nonnull)params;
-......
+//post
+- (RACSignal*_Nonnull)mic_POST:(NSDictionary*_Nonnull)params;
+//head
+- (RACSignal*_Nonnull)mic_HEAD:(NSDictionary*_Nonnull)params;
+//patch
+- (RACSignal*_Nonnull)mic_PATCH:(NSDictionary*_Nonnull)params;
+//put
+- (RACSignal*_Nonnull)mic_PUT:(NSDictionary*_Nonnull)params;
+//delete
+- (RACSignal*_Nonnull)mic_DELETE:(NSDictionary*_Nonnull)params;
+//upload
+- (RACSignal*_Nonnull)mic_upload:(NSDictionary * _Nonnull )params
+                data:(id _Nullable )data
+              mimeType:(nullable NSString*)mimeType
+              progress:(void(^_Nullable)(NSProgress * _Nullable progress))progressBlock
 ```
 使用示例
 ```
