@@ -1,5 +1,5 @@
 # PSNetWork
-`PSNetWork`是对[AFNetworking](https://github.com/AFNetworking/AFNetworking)的二次封装，使用了`ReactiveObjC`进行封装，定义了各种请求的RACSignal，使用时只需要监听信号处理返回的数据
+`PSNetWork`是对[AFNetworking](https://github.com/AFNetworking/AFNetworking)的二次封装，使用了`ReactiveObjC`进行封装，定义了各种请求的RACSignal，使用时只需要监听信号
 
 # 快速集成
 ```
