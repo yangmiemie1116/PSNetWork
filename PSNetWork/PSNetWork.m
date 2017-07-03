@@ -40,6 +40,11 @@
     return self;
 }
 
+- (void)setSessionDidReceiveAuthenticationChallenge:(AFURLSessionDidReceiveAuthenticationChallengeBlock)sessionDidReceiveAuthenticationChallenge {
+    _sessionDidReceiveAuthenticationChallenge = sessionDidReceiveAuthenticationChallenge;
+    [self.safeManager setSessionDidReceiveAuthenticationChallengeBlock:sessionDidReceiveAuthenticationChallenge];
+}
+
 #pragma mark - 创建Https SessionManager
 - (void)p_createSafeManager {
     AFSecurityPolicy *securityPolicy =  [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
@@ -53,10 +58,13 @@
     self.safeManager.responseSerializer = responseSerializer;
     
     AFHTTPRequestSerializer *requestSerializer = [AFHTTPRequestSerializer serializer];
-    [requestSerializer setValue:@"iphone" forHTTPHeaderField:@"header-platform"];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [requestSerializer setValue:@"iPad" forHTTPHeaderField:@"header-platform"];
+    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        [requestSerializer setValue:@"iPhone" forHTTPHeaderField:@"header-platform"];
+    }
     self.safeManager.requestSerializer = requestSerializer;
     self.safeManager.securityPolicy = securityPolicy;
-    [self.safeManager setSessionDidReceiveAuthenticationChallengeBlock:self.sessionDidReceiveAuthenticationChallenge];
 }
 
 #pragma mark - 创建Http SessionManager
@@ -68,7 +76,11 @@
                                                  nil];
     self.normalManager.responseSerializer = responseSerializer;
     AFHTTPRequestSerializer *requestSerializer = [AFHTTPRequestSerializer serializer];
-    [requestSerializer setValue:@"iphone" forHTTPHeaderField:@"header-platform"];
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        [requestSerializer setValue:@"iPad" forHTTPHeaderField:@"header-platform"];
+    } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone){
+        [requestSerializer setValue:@"iPhone" forHTTPHeaderField:@"header-platform"];
+    }
     self.normalManager.requestSerializer = requestSerializer;
     self.normalManager.securityPolicy = [AFSecurityPolicy defaultPolicy];
 }
@@ -121,8 +133,8 @@
                 [subscriber sendError:error];
             } else {
                 NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-                if ([responseDict[@"result"] integerValue] != 1) {
-                    NSError *newError = [NSError errorWithDomain:NSOSStatusErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseDict[@"message"]?:@""}];
+                if ([responseDict[self.result] integerValue] != 1) {
+                    NSError *newError = [NSError errorWithDomain:NSOSStatusErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseDict[self.message]?:@""}];
                     [subscriber sendError:newError];
                 } else {
                     [subscriber sendNext:responseDict];
@@ -193,8 +205,8 @@
         [subscriber sendError:error];
     } else {
         NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        if ([responseDict[@"result"] integerValue] != 1) {
-            NSError *newError = [NSError errorWithDomain:NSOSStatusErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseDict[@"message"]?:@""}];
+        if ([responseDict[self.result] integerValue] != 1) {
+            NSError *newError = [NSError errorWithDomain:NSOSStatusErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseDict[self.message]?:@""}];
             [subscriber sendError:newError];
         } else {
             [subscriber sendNext:responseDict];

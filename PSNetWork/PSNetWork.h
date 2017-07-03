@@ -29,6 +29,16 @@ typedef NSURLSessionAuthChallengeDisposition (^AFURLSessionDidReceiveAuthenticat
 @property (nonatomic, assign) BOOL isHttps;
 
 /**
+ 网络请求结束，标识成功或者失败的字段
+ */
+@property (nonatomic, copy) NSString * _Nullable result;
+
+/**
+ 网络请求返回message关键字
+ */
+@property (nonatomic, copy) NSString * _Nullable message;
+
+/**
  写入全局的请求地址
 
  @param baseUrlString baseUrlString
