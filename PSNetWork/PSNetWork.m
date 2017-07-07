@@ -118,6 +118,9 @@
 - (RACSignal*)rac_request:(id)parameters method:(NSString*)method {
     return [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
         NSMutableDictionary *mutableParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
+        if (self.baseParameters) {
+            [mutableParameters addEntriesFromDictionary:self.baseParameters];
+        }
         AFHTTPSessionManager *manager = self.isHttps ? self.safeManager : self.normalManager;
         manager.requestSerializer.timeoutInterval = self.timeout;
         self.timeout = defaultTimeout;
@@ -125,7 +128,7 @@
         if ([method isEqualToString:@"POST"]) {
             urlString = self.baseUrlString;
         } else {
-            urlString = [self baseUrl:self.baseUrlString parameters:parameters];
+            urlString = [self baseUrl:self.baseUrlString parameters:mutableParameters];
         }
         NSURLRequest *request = [manager.requestSerializer requestWithMethod:method URLString:urlString parameters:mutableParameters error:nil];
         NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
@@ -155,6 +158,10 @@
               mimeType:(NSString *)mimeType
               progress:(void(^)(NSProgress *progress))progressBlock {
     return [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
+        NSMutableDictionary *mutableParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
+        if (self.baseParameters) {
+            [mutableParameters addEntriesFromDictionary:self.baseParameters];
+        }
         AFHTTPSessionManager *manager = self.isHttps? self.safeManager : self.normalManager;
         manager.requestSerializer.timeoutInterval = self.timeout;
         self.timeout = defaultTimeout;
@@ -163,7 +170,7 @@
         NSError *formError = nil;
         NSURLSessionUploadTask *dataTask = nil;
         if ([data isKindOfClass:[NSArray class]]) {
-            request = [manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:parameters constructingBodyWithBlock:^(id <AFMultipartFormData> formData) {
+            request = [manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:mutableParameters constructingBodyWithBlock:^(id <AFMultipartFormData> formData) {
                 [(NSArray*)data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     if ([obj isKindOfClass:[UIImage class]]) {
                         NSData *imageData = UIImageJPEGRepresentation(obj, 0.5);
@@ -183,12 +190,12 @@
                 [self processResponse:subscriber error:error responseObject:responseObject];
             }];
         } else if ([data isKindOfClass:[NSData class]]) {
-            NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:urlString parameters:parameters error:nil];
+            NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:urlString parameters:mutableParameters error:nil];
             dataTask = [manager uploadTaskWithRequest:request fromData:data progress:progressBlock completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
                 [self processResponse:subscriber error:error responseObject:responseObject];
             }];
         } else if ([data isKindOfClass:[NSURL class]]) {
-            NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:urlString parameters:parameters error:nil];
+            NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:urlString parameters:mutableParameters error:nil];
             dataTask = [manager uploadTaskWithRequest:request fromFile:data progress:progressBlock completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
                 [self processResponse:subscriber error:error responseObject:responseObject];
             }];

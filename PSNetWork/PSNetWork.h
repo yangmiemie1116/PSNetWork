@@ -24,6 +24,11 @@ typedef NSURLSessionAuthChallengeDisposition (^AFURLSessionDidReceiveAuthenticat
 @property (nonatomic, assign) NSTimeInterval timeout;
 
 /**
+ 网络请求公有参数
+ */
+@property(nonatomic, strong) NSDictionary * _Nonnull baseParameters;
+
+/**
  是否为HTTPS请求
  */
 @property (nonatomic, assign) BOOL isHttps;
