@@ -124,13 +124,7 @@
         AFHTTPSessionManager *manager = self.isHttps ? self.safeManager : self.normalManager;
         manager.requestSerializer.timeoutInterval = self.timeout;
         self.timeout = defaultTimeout;
-        NSString *urlString = nil;
-        if ([method isEqualToString:@"POST"]) {
-            urlString = self.baseUrlString;
-        } else {
-            urlString = [self baseUrl:self.baseUrlString parameters:mutableParameters];
-        }
-        NSURLRequest *request = [manager.requestSerializer requestWithMethod:method URLString:urlString parameters:mutableParameters error:nil];
+        NSURLRequest *request = [manager.requestSerializer requestWithMethod:method URLString:self.baseUrlString parameters:mutableParameters error:nil];
         NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
             if (error) {
                 [subscriber sendError:error];
@@ -165,12 +159,11 @@
         AFHTTPSessionManager *manager = self.isHttps? self.safeManager : self.normalManager;
         manager.requestSerializer.timeoutInterval = self.timeout;
         self.timeout = defaultTimeout;
-        NSString *urlString = self.baseUrlString;
         NSMutableURLRequest *request = nil;
         NSError *formError = nil;
         NSURLSessionUploadTask *dataTask = nil;
         if ([data isKindOfClass:[NSArray class]]) {
-            request = [manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:urlString parameters:mutableParameters constructingBodyWithBlock:^(id <AFMultipartFormData> formData) {
+            request = [manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:self.baseUrlString parameters:mutableParameters constructingBodyWithBlock:^(id <AFMultipartFormData> formData) {
                 [(NSArray*)data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     if ([obj isKindOfClass:[UIImage class]]) {
                         NSData *imageData = UIImageJPEGRepresentation(obj, 0.5);
@@ -190,12 +183,12 @@
                 [self processResponse:subscriber error:error responseObject:responseObject];
             }];
         } else if ([data isKindOfClass:[NSData class]]) {
-            NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:urlString parameters:mutableParameters error:nil];
+            NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:self.baseUrlString parameters:mutableParameters error:nil];
             dataTask = [manager uploadTaskWithRequest:request fromData:data progress:progressBlock completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
                 [self processResponse:subscriber error:error responseObject:responseObject];
             }];
         } else if ([data isKindOfClass:[NSURL class]]) {
-            NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:urlString parameters:mutableParameters error:nil];
+            NSURLRequest *request = [manager.requestSerializer requestWithMethod:@"POST" URLString:self.baseUrlString parameters:mutableParameters error:nil];
             dataTask = [manager uploadTaskWithRequest:request fromFile:data progress:progressBlock completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
                 [self processResponse:subscriber error:error responseObject:responseObject];
             }];
