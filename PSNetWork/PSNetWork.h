@@ -24,6 +24,11 @@ typedef NSURLSessionAuthChallengeDisposition (^AFURLSessionDidReceiveAuthenticat
 @property (nonatomic, assign) NSTimeInterval timeout;
 
 /**
+ 网络请求成功的状态码 default = 1
+ */
+@property (nonatomic, assign) NSInteger successCode;
+
+/**
  网络请求公有参数
  */
 @property(nonatomic, strong) NSDictionary * _Nonnull baseParameters;

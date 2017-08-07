@@ -33,6 +33,7 @@
 - (instancetype) init {
     self = [super init];
     if (self) {
+        self.successCode = 1;
         self.timeout = defaultTimeout;
         [self p_createSafeManager];
         [self p_createNormalManager];
@@ -126,18 +127,7 @@
         self.timeout = defaultTimeout;
         NSURLRequest *request = [manager.requestSerializer requestWithMethod:method URLString:self.baseUrlString parameters:mutableParameters error:nil];
         NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-            if (error) {
-                [subscriber sendError:error];
-            } else {
-                NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-                if ([responseDict[self.result] integerValue] != 1) {
-                    NSError *newError = [NSError errorWithDomain:NSOSStatusErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseDict[self.message]?:@""}];
-                    [subscriber sendError:newError];
-                } else {
-                    [subscriber sendNext:responseDict];
-                    [subscriber sendCompleted];
-                }
-            }
+            [self processResponse:subscriber error:error responseObject:responseObject];
         }];
         [dataTask resume];
         return [RACDisposable disposableWithBlock:^{
@@ -205,8 +195,8 @@
         [subscriber sendError:error];
     } else {
         NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:nil];
-        if ([responseDict[self.result] integerValue] != 1) {
-            NSError *newError = [NSError errorWithDomain:NSOSStatusErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseDict[self.message]?:@""}];
+        if ([responseDict[self.result] integerValue] != self.successCode) {
+            NSError *newError = [NSError errorWithDomain:NSOSStatusErrorDomain code:[responseDict[self.result] integerValue] userInfo:@{NSLocalizedDescriptionKey:responseDict[self.message]?:@""}];
             [subscriber sendError:newError];
         } else {
             [subscriber sendNext:responseDict];
