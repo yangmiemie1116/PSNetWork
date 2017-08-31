@@ -46,6 +46,15 @@
     [self.safeManager setSessionDidReceiveAuthenticationChallengeBlock:sessionDidReceiveAuthenticationChallenge];
 }
 
+- (void)setHttpHeadDcit:(NSDictionary *)httpHeadDcit {
+    if (httpHeadDcit) {
+        [httpHeadDcit enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            [self.safeManager.requestSerializer setValue:obj forHTTPHeaderField:key];
+            [self.normalManager.requestSerializer setValue:obj forHTTPHeaderField:key];
+        }];
+    }
+}
+
 #pragma mark - 创建Https SessionManager
 - (void)p_createSafeManager {
     AFSecurityPolicy *securityPolicy =  [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
@@ -124,6 +133,12 @@
         }
         AFHTTPSessionManager *manager = self.isHttps ? self.safeManager : self.normalManager;
         manager.requestSerializer.timeoutInterval = self.timeout;
+        if (self.httpPartHeadDcit) {
+            [self.httpPartHeadDcit enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
+            }];
+            self.httpPartHeadDcit = nil;
+        }
         self.timeout = defaultTimeout;
         NSURLRequest *request = [manager.requestSerializer requestWithMethod:method URLString:self.baseUrlString parameters:mutableParameters error:nil];
         NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
@@ -148,6 +163,12 @@
         }
         AFHTTPSessionManager *manager = self.isHttps? self.safeManager : self.normalManager;
         manager.requestSerializer.timeoutInterval = self.timeout;
+        if (self.httpPartHeadDcit) {
+            [self.httpPartHeadDcit enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
+            }];
+            self.httpPartHeadDcit = nil;
+        }
         self.timeout = defaultTimeout;
         NSMutableURLRequest *request = nil;
         NSError *formError = nil;
@@ -203,19 +224,6 @@
             [subscriber sendCompleted];
         }
     }
-}
-
--(NSString*)baseUrl:(NSString*)url parameters:(id)parameters {
-    NSMutableArray *mutableArray = @[].mutableCopy;
-    [parameters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString * obj, BOOL * _Nonnull stop) {
-        NSString *string=[NSString stringWithFormat:@"%@=%@",key,obj];
-        [mutableArray addObject:string];
-    }];
-    NSString *parameterString = [mutableArray componentsJoinedByString:@"&"];
-    NSString *baseUrl=[NSString stringWithFormat:@"%@?%@",url,parameterString];
-    baseUrl = [baseUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    return baseUrl;
-    
 }
 
 @end

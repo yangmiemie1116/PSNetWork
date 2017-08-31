@@ -31,7 +31,17 @@ typedef NSURLSessionAuthChallengeDisposition (^AFURLSessionDidReceiveAuthenticat
 /**
  网络请求公有参数
  */
-@property(nonatomic, strong) NSDictionary * _Nonnull baseParameters;
+@property(nonatomic, strong) NSDictionary * _Nullable baseParameters;
+
+/**
+ http 请求全局 head
+ */
+@property(nonatomic, strong) NSDictionary * _Nullable httpGlobalHeadDcit;
+
+/**
+ http 设置某个请求 head
+ */
+@property(nonatomic, strong) NSDictionary * _Nullable httpPartHeadDcit;
 
 /**
  是否为HTTPS请求
