@@ -43,6 +43,8 @@
  请求 head
  */
 - (NSMutableDictionary*)headerDictionary;
+
+- (void)setValue:(NSString *)value forHTTPHeaderField:(NSString *)field;
 /**
  请求公用字段
  */

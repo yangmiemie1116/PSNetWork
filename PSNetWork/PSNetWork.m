@@ -117,6 +117,11 @@
                 baseUrlStr = [self.config baseUrlString];
             }
         }
+        if (respondSel(self.config, @selector(headerDictionary))) {
+            [self.config.headerDictionary enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
+            }];
+        }
         NSString *httpStr = [self join:baseUrlStr path:path parameters:commonParameters];
         NSURLRequest *request = [manager.requestSerializer requestWithMethod:method URLString:httpStr parameters:parameters error:nil];
         NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
@@ -165,6 +170,11 @@
             if (respondSel(self.config, @selector(baseUrlString))) {
                 baseUrlStr = [self.config baseUrlString];
             }
+        }
+        if (respondSel(self.config, @selector(headerDictionary))) {
+            [self.config.headerDictionary enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
+            }];
         }
         NSString *httpStr = [self join:baseUrlStr path:path parameters:commonParameters];
         NSMutableURLRequest *request = nil;
@@ -281,11 +291,6 @@ BOOL respondSel(id config, SEL selector) {
 - (void)setConfig:(id<PSNetConfig>)config {
     _config = config;
     AFHTTPRequestSerializer *requestSerializer = [AFHTTPRequestSerializer serializer];
-    if (respondSel(self.config, @selector(headerDictionary))) {
-        [config.headerDictionary enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            [requestSerializer setValue:obj forHTTPHeaderField:key];
-        }];
-    }
     BOOL isJson = NO;
     if (respondSel(self.config, @selector(isJsonHeader))) {
         isJson = [config isJsonHeader];
