@@ -30,6 +30,7 @@
 		0D7FEB831EFA1A1100AF3413 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		0D7FEB8C1EFA20D800AF3413 /* PSNetWork.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PSNetWork.h; sourceTree = "<group>"; };
 		0D7FEB8D1EFA20D800AF3413 /* PSNetWork.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PSNetWork.m; sourceTree = "<group>"; };
+		0DB7C88D1F5A7EC600DC8CFC /* PSNetConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSNetConfig.h; sourceTree = "<group>"; };
 		470EE164F534FE92C0EC15CF /* Pods-PSNetWork.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PSNetWork.release.xcconfig"; path = "Pods/Target Support Files/Pods-PSNetWork/Pods-PSNetWork.release.xcconfig"; sourceTree = "<group>"; };
 		D0E984A366B63D2F4F4D8B44 /* Pods-PSNetWork.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PSNetWork.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PSNetWork/Pods-PSNetWork.debug.xcconfig"; sourceTree = "<group>"; };
 		D43CFEFCF07C56047BB184F6 /* libPods-PSNetWork.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PSNetWork.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,6 +88,7 @@
 			children = (
 				0D7FEB8C1EFA20D800AF3413 /* PSNetWork.h */,
 				0D7FEB8D1EFA20D800AF3413 /* PSNetWork.m */,
+				0DB7C88D1F5A7EC600DC8CFC /* PSNetConfig.h */,
 			);
 			path = PSNetWork;
 			sourceTree = "<group>";

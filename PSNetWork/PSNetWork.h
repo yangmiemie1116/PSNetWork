@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <ReactiveObjC/ReactiveObjC.h>
+@protocol PSNetConfig;
 typedef NSURLSessionAuthChallengeDisposition (^AFURLSessionDidReceiveAuthenticationChallengeBlock)(NSURLSession * _Nonnull session, NSURLAuthenticationChallenge * _Nonnull challenge, NSURLCredential * _Nonnull __autoreleasing * _Nonnull credential);
 
 @interface PSNetWork : NSObject
@@ -16,54 +17,10 @@ typedef NSURLSessionAuthChallengeDisposition (^AFURLSessionDidReceiveAuthenticat
  @return PSNetWork
  */
 + (instancetype _Nonnull )shareInstance;
-
+@property (nonatomic, strong) id<PSNetConfig> _Nullable config;
+@property (nonatomic, assign) BOOL isPartHttps;//某个请求是https
+@property (nonatomic, assign) BOOL isGlobalHttps;//全局都是HTTPS
 @property (readwrite, nonatomic, copy) AFURLSessionDidReceiveAuthenticationChallengeBlock _Nonnull sessionDidReceiveAuthenticationChallenge;
-/**
- 超时时间
- */
-@property (nonatomic, assign) NSTimeInterval timeout;
-
-/**
- 网络请求成功的状态码 default = 1
- */
-@property (nonatomic, assign) NSInteger successCode;
-
-/**
- 网络请求公有参数
- */
-@property(nonatomic, strong) NSDictionary * _Nullable baseParameters;
-
-/**
- http 请求全局 head
- */
-@property(nonatomic, strong) NSDictionary * _Nullable httpGlobalHeadDcit;
-
-/**
- http 设置某个请求 head
- */
-@property(nonatomic, strong) NSDictionary * _Nullable httpPartHeadDcit;
-
-/**
- 是否为HTTPS请求
- */
-@property (nonatomic, assign) BOOL isHttps;
-
-/**
- 网络请求结束，标识成功或者失败的字段
- */
-@property (nonatomic, copy) NSString * _Nullable result;
-
-/**
- 网络请求返回message关键字
- */
-@property (nonatomic, copy) NSString * _Nullable message;
-
-/**
- 写入全局的请求地址
-
- @param baseUrlString baseUrlString
- */
-- (void)registerBaseUrl:(NSString*_Nonnull)baseUrlString;
 
 /**
  GET 请求
@@ -71,6 +28,8 @@ typedef NSURLSessionAuthChallengeDisposition (^AFURLSessionDidReceiveAuthenticat
  @return GET Signal
  */
 - (RACSignal*_Nonnull)mic_GET:(NSDictionary*_Nonnull)params;
+//path 自定义请求路径
+- (RACSignal*_Nonnull)mic_GET:(NSDictionary*_Nonnull)params path:(NSString*_Nullable)path;
 
 /**
  HEAD 请求
@@ -78,6 +37,8 @@ typedef NSURLSessionAuthChallengeDisposition (^AFURLSessionDidReceiveAuthenticat
  @return HEAD Signal
  */
 - (RACSignal*_Nonnull)mic_HEAD:(NSDictionary*_Nonnull)params;
+//path 自定义请求路径
+- (RACSignal*_Nonnull)mic_HEAD:(NSDictionary*_Nonnull)params path:(NSString*_Nullable)path;
 
 /**
  POST 请求
@@ -85,20 +46,24 @@ typedef NSURLSessionAuthChallengeDisposition (^AFURLSessionDidReceiveAuthenticat
  @return POST Signal
  */
 - (RACSignal*_Nonnull)mic_POST:(NSDictionary*_Nonnull)params;
-
+//path 自定义请求路径
+- (RACSignal*_Nonnull)mic_POST:(NSDictionary*_Nonnull)params path:(NSString*_Nullable)path;
 /**
  PATCH 请求
  @param params 参数
  @return PATCH Signal
  */
 - (RACSignal*_Nonnull)mic_PATCH:(NSDictionary*_Nonnull)params;
-
+//path 自定义请求路径
+- (RACSignal*_Nonnull)mic_PATCH:(NSDictionary*_Nonnull)params path:(NSString*_Nullable)path;
 /**
  PUT 请求
  @param params 参数
  @return PUT Signal
  */
 - (RACSignal*_Nonnull)mic_PUT:(NSDictionary*_Nonnull)params;
+//path 自定义请求路径
+- (RACSignal*_Nonnull)mic_PUT:(NSDictionary*_Nonnull)params path:(NSString*_Nullable)path;
 
 /**
  DELETE 请求
@@ -106,7 +71,8 @@ typedef NSURLSessionAuthChallengeDisposition (^AFURLSessionDidReceiveAuthenticat
  @return DELETE Signal
  */
 - (RACSignal*_Nonnull)mic_DELETE:(NSDictionary*_Nonnull)params;
-
+//path 自定义请求路径
+- (RACSignal*_Nonnull)mic_DELETE:(NSDictionary*_Nonnull)params path:(NSString*_Nullable)path;
 
 /**
  上传数据
@@ -120,5 +86,10 @@ typedef NSURLSessionAuthChallengeDisposition (^AFURLSessionDidReceiveAuthenticat
                 data:(id _Nullable )data
               mimeType:(nullable NSString*)mimeType
               progress:(void(^_Nullable)(NSProgress * _Nullable progress))progressBlock;
+- (RACSignal*_Nonnull)mic_upload:(NSDictionary * _Nonnull )params
+                            data:(id _Nullable )data
+                        mimeType:(nullable NSString*)mimeType
+                            path:(NSString*_Nullable)path
+                        progress:(void(^_Nullable)(NSProgress * _Nullable progress))progressBlock;
 
 @end

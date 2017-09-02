@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "PSNetWork"
-  s.version      = "0.0.6"
+  s.version      = "0.0.7"
   s.summary      = "使用RAC封装AFNetWork"
   s.description  = <<-DESC
                    使用RAC封装AFNetWork
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "8.0"
   s.ios.deployment_target = "8.0"
   s.source       = { :git => "https://github.com/yangmiemie1116/PSNetWork.git", :tag => "#{s.version}" }
-  s.source_files  = "PSNetWork/*.{h,m}"
+  s.source_files  = "PSNetWork/*.{h,m,mm}"
   s.requires_arc = true
   s.dependency "ReactiveObjC", "~> 2.1"
   s.dependency "AFNetworking"
