@@ -8,8 +8,12 @@
 
 #import "PSNetWork.h"
 #import <AFNetworking/AFNetworking.h>
+#import <pthread/pthread.h>
 #import "PSNetConfig.h"
 #define defaultTimeout 60
+
+#define Lock() pthread_mutex_lock(&_lock)
+#define Unlock() pthread_mutex_unlock(&_lock)
 
 @interface PSNetWork()
 @property (nonatomic, strong) AFHTTPSessionManager *safeManager;
@@ -17,6 +21,9 @@
 @end
 
 @implementation PSNetWork
+{
+    pthread_mutex_t _lock;
+}
 + (instancetype)shareInstance {
     static dispatch_once_t onceToken;
     static PSNetWork *util = nil;
@@ -29,6 +36,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        pthread_mutex_init(&_lock, NULL);
         [self p_createSessionManager];
     }
     return self;
