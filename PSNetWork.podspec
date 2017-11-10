@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "PSNetWork"
-  s.version      = "0.1"
+  s.version      = "0.2"
   s.summary      = "使用RAC封装AFNetWork"
   s.description  = <<-DESC
                    使用RAC封装AFNetWork

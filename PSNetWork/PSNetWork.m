@@ -319,6 +319,7 @@ BOOL respondSel(id config, SEL selector) {
     AFHTTPResponseSerializer* responseSerializer = [AFHTTPResponseSerializer serializer];
     responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",
                                                  @"application/json",
+                                                 @"text/plain",
                                                  nil];
     AFSecurityPolicy *securityPolicy =  [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
     securityPolicy.allowInvalidCertificates = YES;
