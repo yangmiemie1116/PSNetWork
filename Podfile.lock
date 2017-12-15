@@ -14,7 +14,7 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - PSNetWork (0.0.6):
+  - PSNetWork (0.2):
     - AFNetworking
     - ReactiveObjC (~> 2.1)
   - ReactiveObjC (2.1.2)
@@ -28,9 +28,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  PSNetWork: c059ee4dc2556bfee473a65ad1f779a559a1d2c3
+  PSNetWork: 2543d4e3ca391583b95782875b1bafb8559bb3a0
   ReactiveObjC: 7b6782ae39f9ac0f57205c3b0c0b69b9dd7048c0
 
 PODFILE CHECKSUM: 156a1a7b881fe4e92a25330a8f6ef3ea4efe5b9b
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.3.0.beta.2

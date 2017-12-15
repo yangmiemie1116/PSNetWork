@@ -102,10 +102,13 @@
         if (respondSel(self.config, @selector(timeout))) {
             timeout = [self.config timeout];
         }
-        NSDictionary *commonParameters = nil;
+        NSMutableDictionary *commonParameters = @{}.mutableCopy;
         NSString *baseUrlStr = nil;
         if (respondSel(self.config, @selector(commonRequestParameters))) {
             commonParameters = [self.config commonRequestParameters];
+        }
+        if (parameters) {
+            [commonParameters addEntriesFromDictionary:parameters];
         }
         AFHTTPSessionManager *manager = self.normalManager;
         manager.requestSerializer.timeoutInterval = timeout;
@@ -130,8 +133,8 @@
                 [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
             }];
         }
-        NSString *httpStr = [self join:baseUrlStr path:path parameters:commonParameters];
-        NSURLRequest *request = [manager.requestSerializer requestWithMethod:method URLString:httpStr parameters:parameters error:nil];
+        NSString *httpStr = [self join:baseUrlStr path:path];
+        NSURLRequest *request = [manager.requestSerializer requestWithMethod:method URLString:httpStr parameters:commonParameters error:nil];
         NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
             [self processResponse:subscriber error:error responseObject:responseObject];
         }];
@@ -152,7 +155,7 @@
                     path:(NSString*)path
               progress:(void(^)(NSProgress *progress))progressBlock {
     return [RACSignal createSignal:^RACDisposable * _Nullable(id<RACSubscriber>  _Nonnull subscriber) {
-        NSDictionary *commonParameters = nil;
+        NSMutableDictionary *commonParameters = @{}.mutableCopy;
         NSString *baseUrlStr = nil;
         NSTimeInterval timeout = defaultTimeout;
         if (respondSel(self.config, @selector(timeout))) {
@@ -160,6 +163,9 @@
         }
         if (respondSel(self.config, @selector(commonRequestParameters))) {
             commonParameters = [self.config commonRequestParameters];
+        }
+        if (parameters) {
+            [commonParameters addEntriesFromDictionary:parameters];
         }
         AFHTTPSessionManager *manager = self.normalManager;
         manager.requestSerializer.timeoutInterval = timeout;
@@ -184,12 +190,12 @@
                 [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
             }];
         }
-        NSString *httpStr = [self join:baseUrlStr path:path parameters:commonParameters];
+        NSString *httpStr = [self join:baseUrlStr path:path];
         NSMutableURLRequest *request = nil;
         NSError *formError = nil;
         NSURLSessionUploadTask *dataTask = nil;
         if ([data isKindOfClass:[NSArray class]]) {
-            request = [manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:httpStr parameters:parameters constructingBodyWithBlock:^(id <AFMultipartFormData> formData) {
+            request = [manager.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:httpStr parameters:commonParameters constructingBodyWithBlock:^(id <AFMultipartFormData> formData) {
                 [(NSArray*)data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     if ([obj isKindOfClass:[UIImage class]]) {
                         NSData *imageData = UIImageJPEGRepresentation(obj, 0.5);
@@ -269,21 +275,11 @@
 }
 
 #pragma mark - 拼装公用数据
--(NSString*)join:(NSString*)url path:(NSString*)path parameters:(NSDictionary*)parameters {
-    NSMutableArray *mutableArray = @[].mutableCopy;
+-(NSString*)join:(NSString*)url path:(NSString*)path {
     if (path) {
         url = [NSString stringWithFormat:@"%@/%@",url, path];
     }
     NSString *baseUrl = url;
-    if (parameters) {
-        [parameters enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString * obj, BOOL * _Nonnull stop) {
-            NSString *string=[NSString stringWithFormat:@"%@=%@",key,obj];
-            [mutableArray addObject:string];
-        }];
-        NSString *parameterString = [mutableArray componentsJoinedByString:@"&"];
-        baseUrl = [baseUrl stringByAppendingFormat:@"?%@",parameterString];
-        baseUrl = [baseUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    }
     return baseUrl;
 }
 
