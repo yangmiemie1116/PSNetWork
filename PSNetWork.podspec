@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "PSNetWork"
-  s.version      = "0.2.1"
+  s.version      = "0.2.2"
   s.summary      = "使用RAC封装AFNetWork"
   s.description  = <<-DESC
                    使用RAC封装AFNetWork
@@ -16,6 +16,6 @@ Pod::Spec.new do |s|
   s.source_files  = "PSNetWork/*.{h,m,mm}"
   s.requires_arc = true
   s.dependency "ReactiveObjC", "~> 2.1"
-  s.dependency "AFNetworking"
+  s.dependency "AFNetworking", "3.1.0"
 
 end
